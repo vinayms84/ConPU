@@ -73,6 +73,46 @@ def sessions_to_calcualte_cluster_centers_for_inference(seq_length,features):
   dataset=dataset.astype(np.float32)
   return dataset, session_label
 
+def get_cluster_centers(data, target, tau0=0.3, tau1=0.7):
+  n=target.shape[0]
+  count_1 = 0
+  count_0 = 0
+  data=data.detach().cpu().numpy()
+  target=target.detach().cpu().numpy()
+  for i in range(n):
+    if target[i]==1:
+      count_1 = count_1+1
+    else:
+      count_0 = count_0+1
+
+
+
+  malicious = np.zeros([count_1,data.shape[1]], dtype=np.float32)
+  train_set = np.zeros([count_0,data.shape[1]], dtype=np.float32)
+
+
+  index_1=0
+  index_0=0
+  for k in range(n):
+    if target[k]==1:
+      malicious[index_1]=data[k]
+      index_1=index_1+1
+    else:
+      train_set[index_0]=data[k]
+      index_0 = index_0+1
+
+
+
+  V1=np.mean(malicious, axis=0)
+  VD=np.mean(train_set, axis=0)
+  V0=(1/tau0)*(VD-(tau1*V1))
+
+  V1=torch.from_numpy(V1)
+  V0=torch.from_numpy(V0)
+
+  return V1, V0
+
+
 # generate the cluster centers for inference
 
 data_vector, label= sessions_to_calcualte_cluster_centers_for_inference(seq_length, features)
