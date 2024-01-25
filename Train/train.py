@@ -1,14 +1,14 @@
 import random
 from torch.utils.data.sampler import Sampler
 import torch
-import torchvision  # torch package for vision related things
-import torch.nn.functional as F  # Parameterless functions, like (some) activation functions
-import torchvision.datasets as datasets  # Standard datasets
-import torchvision.transforms as transforms  # Transformations we can perform on our dataset for augmentation
-from torch import optim  # For optimizers like SGD, Adam, etc.
-from torch import nn  # All neural network modules
-from torch.utils.data import DataLoader  # Gives easier dataset managment by creating mini batches etc.
-from tqdm import tqdm  # For a nice progress bar!
+import torchvision  
+import torch.nn.functional as F 
+import torchvision.datasets as datasets  
+import torchvision.transforms as transforms  
+from torch import optim  
+from torch import nn  
+from torch.utils.data import DataLoader  
+from tqdm import tqdm  
 import pandas as pd
 from torch.utils.data import Dataset, DataLoader
 import math
@@ -125,7 +125,7 @@ optimizer = optim.Adam(net.parameters(), lr=learning_rate)
 
 # Function to generate cluster centers in each training batch
 
-def get_cluster_centers(data, target, tau0=0.55,tau1=0.45):
+def get_cluster_centers(data, target, tau0=0.3,tau1=0.7):
   n=target.shape[0]
   count_1 = 0
   count_0 = 0
